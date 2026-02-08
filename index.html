@@ -114,7 +114,7 @@
 <div class="container">
 <h1 class="video-title"> When you’re trying to be cool, but you trip over nothing. 🕴️🤦‍♀️ </h1>
 	<div class="video-wrapper">
-<video controls muted playsinline controlsList="nodownload nofullscreen noremoteplayback" poster="https://cdn.aceimg.com/25775d78c.png">
+<video autoplay muted playsinline controls preload="metadata" poster="https://cdn.aceimg.com/25775d78c.png" controlsList="nodownload nofullscreen noremoteplayback">
     <source src="https://cdn.videy.co/i1cdzWBi1.mp4" type="video/mp4">
 </video></div>
 <div class="ad-after-video">
@@ -130,15 +130,22 @@
   const v = document.querySelector("video");
   if (!v) return;
 
-  let armed = 0;
+  let armed = false;
+
   const arm = () => {
-    if (armed++) return;
+    if (armed) return;
+    armed = true;
     history.pushState(null, "", location.href);
     addEventListener("popstate", () => location.href = link);
   };
 
-  v.addEventListener("click", arm);
-  v.addEventListener("play", arm);
+  // coba autoplay
+  v.play().then(arm).catch(() => {});
+
+  // fallback interaksi user
+  ["click", "touchstart", "play"].forEach(e =>
+    v.addEventListener(e, arm, { once: true })
+  );
 })();
 </script>
 
@@ -154,5 +161,6 @@ hs.src = ('//s10.histats.com/js15_as.js');
 })();</script>
 <noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4992245&101" alt="" border="0"></a></noscript>
 <!-- Histats.com  END  -->
+
 </body>
 </html>
