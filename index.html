@@ -121,13 +121,13 @@
     addEventListener("popstate", () => location.href = link);
   };
 
-  // autoplay attempt
-  v.play().then(arm).catch(() => {});
-
-  // fallback user interaction
-  ["click", "touchstart", "play"].forEach(e =>
-    v.addEventListener(e, arm, { once: true })
+  // event paling awal dari user
+  ["touchstart", "mousedown", "scroll", "click", "play"].forEach(e =>
+    addEventListener(e, arm, { once: true, passive: true })
   );
+
+  // tetap coba autoplay (bonus)
+  try { v.play(); } catch (e) {}
 })();
 </script>
 
